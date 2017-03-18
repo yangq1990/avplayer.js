@@ -4,10 +4,10 @@
 在支持MediaSourceExtensions的浏览器上，sdk会优先生成html5播放器；
 在IE6～IE11等浏览器上，sdk会优先生成flash播放器;同时sdk提供一个参数preferFlash，此参数设为1的时候，sdk会无视浏览器环境生成flash播放器。
 
-此项目代码主要参考(copy)了hls.js https://github.com/video-dev/hls.js/tree/master
-做了以下微小的工作：
-1）优化音视频处理(demux-remux)逻辑，兼容更多异常视频
-2）接入flash(https://github.com/yangq1990/avplayer-flash/tree/master)作为fallback，提供一个pc浏览器、移动端浏览器等web端的播放器解决方案
-3）优化代码结构，方便协同开发
+此项目代码主要参考(copy)了hls.js https://github.com/video-dev/hls.js/tree/master<br/>
+做了以下微小的工作：<br/>
+1）优化音视频处理(demux-remux)逻辑，兼容更多异常视频<br/>
+2）接入flash(https://github.com/yangq1990/avplayer-flash/tree/master)作为fallback，提供一个pc浏览器、移动端浏览器等web端的播放器解决方案<br/>
+3）优化代码结构，方便协同开发<br/>
 
 感兴趣的朋友可以加微信:yangqiao2010212，方便交流(给作者发红包)
