@@ -1,0 +1,5 @@
+# avplayer.js
+一个根据浏览器环境决定生成html5或flash播放器的js sdk，支持播放hls mp4。
+
+在支持MediaSourceExtendsions的浏览器上，sdk会优先生成html5播放器；
+在IE6～IE11等浏览器上，sdk会优先生成flash播放器;同时sdk提供一个参数preferFlash，此参数设为1的时候，sdk会无视浏览器环境生成flash播放器。
