@@ -4,7 +4,7 @@ import {AVPlayerTips} from './avplayer-tips.js';
 
 /**
  * AVPlayer基类
- * @author dw_yangqiao
+ * @author yangq
  */
 class AVPlayerBase extends EventHandler {
     constructor(AVPLAYER, ...events) {
