@@ -803,30 +803,34 @@ var AVPlayer = function () {
             }
 
             //自动播放
-            param.autoPlay = !!conf && conf["autoPlay"] !== undefined ? conf["autoPlay"] : 0;
+            param.autoPlay = !!conf && !(0, _commonFunctions.isUndefined)(conf["autoPlay"]) ? true : false;
             //封面图片地址
-            param.posterURL = !!conf && conf["poster"] !== undefined ? conf["poster"] : ""; //默认封面图片地址为""
+            param.posterURL = !!conf && !(0, _commonFunctions.isUndefined)(conf["poster"]) ? conf["poster"] : ""; //默认封面图片地址为""
             //播放器节点id
             param.nodeId = (0, _commonFunctions.createNodeId)();
             //flash wmode
-            param.wmode = !!conf && conf["wmode"] !== undefined ? conf["wmode"] : "opaque";
+            param.wmode = !!conf && !(0, _commonFunctions.isUndefined)(conf["wmode"]) ? conf["wmode"] : "opaque";
             //title
-            param.title = !!conf && conf["title"] !== undefined ? conf["title"] : "";
+            param.title = !!conf && !(0, _commonFunctions.isUndefined)(conf["title"]) ? conf["title"] : "";
             //autoReplay
-            param.autoRewind = !!conf && conf["autoRewind"] !== undefined ? conf["autoRewind"] : 0;
+            param.autoRewind = !!conf && !(0, _commonFunctions.isUndefined)(conf["autoRewind"]) ? true : false;
             //disableFullScreenButton(for webview)
-            param.disableFSButton = !!conf && conf["disableFSButton"] !== undefined ? conf["disableFSButton"] : 0;
+            param.disableFSButton = !!conf && !(0, _commonFunctions.isUndefined)(conf["disableFSButton"]) ? true : false;
             //prefer flash. we prefer html5 by default
-            param.preferFlash = !!conf && (conf["preferFlash"] == 1 || conf["preferFlash"] == "1") ? true : false;
+            param.preferFlash = !!conf && !(0, _commonFunctions.isUndefined)(conf["preferFlash"]) ? true : false;
             //cutomUI
-            param.customUI = !!conf && (conf["customUI"] == 1 || conf["customUI"] == "1") ? true : false;
+            param.customUI = !!conf && !(0, _commonFunctions.isUndefined)(conf["customUI"]) ? true : false;
+            //simplifiedUI used by avplayer.swf
+            param.simplifiedUI = !!conf && !(0, _commonFunctions.isUndefined)(conf["simplifiedUI"]) ? true : false;
+
             //log div id
             if (!!conf && !!conf.logDivId) {
                 _avlog2.default.logDivId = conf.logDivId;
             }
 
-            if (param.disableFSButton && (0, _systeminfo.getMobileSystemInfo)().sys == 0) {//禁用全屏按钮，只在android webview下生效
-
+            if (param.disableFSButton && (0, _systeminfo.getMobileSystemInfo)().sys == 0) {
+                //禁用全屏按钮，只在android webview下生效
+                (0, _commonFunctions.loadCSS)('./css/disable_fullscreen_btn.css');
             }
 
             this._triggerSetupEvent(param);
@@ -836,6 +840,8 @@ var AVPlayer = function () {
         value: function _triggerSetupEvent(param) {
             var parseParamsCost = Math.round(performance.now() - this._bootTimestamp);
             _avlog2.default.print('\u53C2\u6570\u89E3\u6790\u5B8C\u6BD5,\u8017\u65F6 ' + parseParamsCost + ' ms');
+
+            (0, _commonFunctions.loadCSS)('./css/main.css');
 
             var event_type = void 0;
             if (!param.preferFlash && _browserSniff2.default.isMSESupported && (0, _systeminfo.getMobileSystemInfo)().browser !== 8) {
@@ -2416,8 +2422,13 @@ var AVPlayerPCH5Default = function (_AVPlayerBase) {
             var div = document.getElementById(param.parentId); //如果没有传入parentId，avplayer.js会生成一个parentId，此时parent node有可能在dom上不存在
             if (!!div) {
                 div.appendChild(video);
+                if (div.className === "") {
+                    //设置avplayer container默认样式
+                    div.className = "defaultContainerStyle";
+                }
             } else {
                 var p_div = document.createElement("div");
+                p_div.className = "defaultContainerStyle";
                 p_div.id = param.parentId;
                 p_div.appendChild(video);
             }
@@ -12410,8 +12421,13 @@ var AVPlayerPCH5Hls = function (_AVPlayerBase) {
             var div = document.getElementById(param.parentId); //如果业务方没有传入pDivId，h5 player会生成一个pDivId，此时这个div有可能在dom上不存在
             if (!!div) {
                 div.appendChild(video);
+                if (div.className === "") {
+                    //设置avplayer container默认样式
+                    div.className = "defaultContainerStyle";
+                }
             } else {
                 var p_div = document.createElement("div");
+                p_div.className = "defaultContainerStyle";
                 p_div.id = pid;
                 p_div.appendChild(video);
             }
@@ -15948,7 +15964,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 exports.createUUID = createUUID;
 exports.createNodeId = createNodeId;
 exports.isString = isString;
+exports.isUndefined = isUndefined;
 exports.toFixed = toFixed;
+exports.loadCSS = loadCSS;
 function createUUID() {
     var s = [];
     var hexDigits = "0123456789abcdef";
@@ -15979,6 +15997,13 @@ function isString(input) {
     return input !== null && (typeof input === 'string' || (typeof input === "undefined" ? "undefined" : _typeof(input)) === 'object' && input.constructor === String);
 }
 
+/** 
+ * 检测输入是否为undefined
+ */
+function isUndefined(input) {
+    return input !== null && typeof input === 'undefined';
+}
+
 /**
  * 返回指定精度的数字，默认保留小数点后1位
  */
@@ -15986,6 +16011,22 @@ function toFixed(num) {
     var precision = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
 
     return num.toFixed(precision);
+}
+
+/**
+ * 加载样式
+ */
+function loadCSS(url) {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = url;
+
+    if (document.getElementsByTagName("head")[0]) {
+        document.getElementsByTagName("head")[0].appendChild(link);
+    } else {
+        document.appendChild(link);
+    }
 }
 
 },{}],60:[function(_dereq_,module,exports){
