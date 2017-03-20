@@ -28,9 +28,32 @@ export function isString(input) {
     return input !== null && (typeof input === 'string' || (typeof input === 'object' && input.constructor === String));
 }
 
+/** 
+ * 检测输入是否为undefined
+ */
+export function isUndefined(input) {
+    return input !== null && typeof input === 'undefined';
+}
+
 /**
  * 返回指定精度的数字，默认保留小数点后1位
  */
 export function toFixed(num, precision=1) {
     return num.toFixed(precision);
+}
+
+/**
+ * 加载样式
+ */
+export function loadCSS(url) {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = url;
+
+    if(document.getElementsByTagName("head")[0]) {
+        document.getElementsByTagName("head")[0].appendChild(link);      
+    } else {
+        document.appendChild(link);
+    }
 }
