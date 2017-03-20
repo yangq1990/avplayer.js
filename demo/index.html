@@ -4,32 +4,25 @@
     <meta charset="UTF-8">
     <title></title>
     <style>
-/*        .playerContainer {
-            width: 600px;
-            height: 450px;
-        }*/
     </style>
-	<script src="../dist/avplayer.min.js"></script>
+	<script src="../dist/avplayer.js"></script>
 </head>
 <body>
-
-<section>
-<div id="playerContainer">
-	
-</div>
-</div>
-</section>
-
-</span>
 <br/>
+</span>
     <input type="button" value="pause" onclick="pauseHandler()">
     <input type="button" value="play" onclick="playHandler()">
     <input type="button" value="mute" onclick="muteHandler()">
     <input type="button" value="unmute" onclick="unmuteHandler()">
     <input type="button" value="seek" onclick="seekHandler()">
     <input type="button" value="remove" onclick="removeHandler()">
-</span>
+</span><br/><br/><br/>
 
+<section>
+<div id="playerContainer">
+	
+</div>
+</section>
 <script>
 
     var avplayer = new AVPlayer({debug:false});
@@ -53,9 +46,8 @@
     //#testcase 2 服务器没有响应允许跨域头，网站根目录也没有crossdomain.xml http://devimages.apple.com/iphone/samples/bipbop/gear4/prog_index.m3u8
     //
     avplayer.setup("https://bitmovin-a.akamaihd.net/content/playhouse-vr/m3u8s/105560_video_540_1500000.m3u8", {
-        parentId:"playerContainer"
-        //autoRewind:1
-        // preferFlash:1
+        parentId:"playerContainer", //播放器将被添加到id为playerContainer的div
+        autoReplay:1 //自动播放
     });
 
     function pauseHandler() {
