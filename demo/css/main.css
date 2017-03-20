@@ -1,0 +1,7 @@
+.defaultContainerStyle{
+    text-align:center;
+    background-color:#000;
+    color:#FFFFFF; 
+    position: absolute;
+    overflow: hidden;
+}
