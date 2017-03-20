@@ -7,6 +7,8 @@
     "build": "npm run buildlib && rimraf dist/* && npm run builddist",
     "buildlib": "rimraf lib/* && babel src -d lib",
     "builddist": "browserify -t browserify-versionify -t [babelify] -p browserify-derequire -p bundle-collapser/plugin -s AVPlayer src/index.js --debug | exorcist dist/avplayer.js.map -b . > dist/avplayer.js",
+    "minify": "uglifyjs dist/avplayer.js -c sequences=true,dead_code=true,conditionals=true,booleans=true,unused=true,if_return=true,join_vars=true,drop_console=true -m --screw-ie8  > dist/avplayer.min.js",
+    "release": "npm run build && npm run minify",
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "http-server -p 8000 .",
     "open": "opener http://localhost:8000/demo/"
@@ -25,6 +27,7 @@
     "http-server": "^0.9.0",
     "opener": "^1.4.3",
     "rimraf": "^2.6.1",
+    "uglify-js": "^2.8.14",
     "url-toolkit": "^2.0.1",
     "webworkify": "^1.4.0"
   }
