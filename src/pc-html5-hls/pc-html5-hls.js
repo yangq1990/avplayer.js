@@ -74,8 +74,12 @@ class AVPlayerPCH5Hls extends AVPlayerBase {
         let div = document.getElementById(param.parentId); //如果业务方没有传入pDivId，h5 player会生成一个pDivId，此时这个div有可能在dom上不存在
         if(!!div) {
             div.appendChild(video);
+            if(div.className === "") { //设置avplayer container默认样式
+                div.className = "defaultContainerStyle";
+            }
         } else {
             let p_div = document.createElement("div");
+            p_div.className = "defaultContainerStyle";
             p_div.id = pid;
             p_div.appendChild(video);
         }

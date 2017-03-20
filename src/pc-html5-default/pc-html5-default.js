@@ -72,8 +72,12 @@ class AVPlayerPCH5Default extends AVPlayerBase {
         let div = document.getElementById(param.parentId); //如果没有传入parentId，avplayer.js会生成一个parentId，此时parent node有可能在dom上不存在
         if(!!div) {
             div.appendChild(video);
+            if(div.className === "") { //设置avplayer container默认样式
+                div.className = "defaultContainerStyle";
+            }
         } else {
             let p_div = document.createElement("div");
+            p_div.className = "defaultContainerStyle";
             p_div.id = param.parentId;
             p_div.appendChild(video);
         }
