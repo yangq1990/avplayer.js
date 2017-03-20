@@ -128,6 +128,7 @@ class AVPlayerPCH5Hls extends AVPlayerBase {
     onError(data) {
         if(!this._playerRemovedFlag) {
             let http_err;
+            let err_reason;
             switch(data.details) { //匹配错误原因
                 case ErrorDetails.MANIFEST_LOAD_ERROR:
                     http_err = 40001;
