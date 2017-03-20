@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+	<script src="../dist/avplayer.js"></script>
+</head>
+<body>
+<br/>
+</span>
+    <input type="button" value="pause" onclick="pauseHandler()">
+    <input type="button" value="play" onclick="playHandler()">
+    <input type="button" value="mute" onclick="muteHandler()">
+    <input type="button" value="unmute" onclick="unmuteHandler()">
+    <input type="button" value="seek" onclick="seekHandler()">
+    <input type="button" value="remove" onclick="removeHandler()">
+</span><br/><br/><br/>
+<section>
+<div id="playerContainer">
+	
+</div>
+</div>
+</section>
+<script>
+
+    var avplayer = new AVPlayer({debug:false});
+    console.log('version->', AVPlayer.version);
+
+    avplayer.on(AVPlayer.Events.PLAYER_STATE_CHANGE, function(event, data) {
+        console.log("avplayer state-->", data.state);
+    });
+
+    avplayer.on(AVPlayer.Events.TIME_UPDATE, function(event, data) {
+        console.log("当前播放时间-->", data.time);
+    });
+
+    //#testcase 1 多种清晰度 http://www.streambox.fr/playlists/test_001/stream.m3u8
+    //#testcase 2 多种清晰度 https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8
+    //#testcase 3 多种清晰度 https://bitmovin-a.akamaihd.net/content/playhouse-vr/m3u8s/105560.m3u8
+    //#testcase 4 h5&flash都支持 https://bitdash-a.akamaihd.net/content/sintel/hls/video/500kbit.m3u8
+    //#testcase 5 h5&flash都支持 https://bitmovin-a.akamaihd.net/content/playhouse-vr/m3u8s/105560_video_540_1500000.m3u8
+    //--------------异常用例-----------------
+    //#testcase 1 h5支持，flash无法播放 http://www.streambox.fr/playlists/test_001/stream_1000k_48k_640x360.m3u8
+    //#testcase 2 服务器没有响应允许跨域头，网站根目录也没有crossdomain.xml http://devimages.apple.com/iphone/samples/bipbop/gear4/prog_index.m3u8
+    //
+    avplayer.setup("https://bitmovin-a.akamaihd.net/content/playhouse-vr/m3u8s/105560_video_540_1500000.m3u8", {
+        parentId:"playerContainer", //播放器将被添加到id为playerContainer的div
+        preferFlash:1,
+        simplifiedUI:1,
+        autoReplay:1 //自动播放
+    });
+
+    function pauseHandler() {
+        avplayer.pause();
+    }
+
+    function playHandler() {
+        avplayer.play();
+    }
+
+    function muteHandler() {
+        avplayer.mute();
+    }
+
+    function unmuteHandler() {
+        avplayer.unmute();
+    }
+
+    function seekHandler() {
+        avplayer.seek(10);
+    }
+
+    function removeHandler() {
+        avplayer.remove();
+    }
+
+</script>
