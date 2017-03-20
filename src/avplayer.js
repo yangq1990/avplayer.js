@@ -3,7 +3,7 @@
 import './utils/avplayer-console-polyfill.js';
 import './utils/avplayer-performance-polyfill.js';
 import EventEmitter from 'events';
-import {createUUID, createNodeId} from './utils/common-functions.js';
+import {createUUID, createNodeId, loadCSS, isUndefined} from './utils/common-functions.js';
 import {getMobileSystemInfo} from './utils/systeminfo.js';
 import BrowserSniff from './utils/browser-sniff';
 import Event from './core/events.js';
@@ -171,39 +171,43 @@ class AVPlayer {
         }
 
         //自动播放
-        param.autoPlay = (!!conf && (conf["autoPlay"] !== undefined)) ? conf["autoPlay"] : 0;
+        param.autoPlay = (!!conf && !isUndefined(conf["autoPlay"])) ? true : false;
         //封面图片地址
-        param.posterURL = (!!conf && (conf["poster"] !== undefined)) ? conf["poster"] : ""; //默认封面图片地址为""
+        param.posterURL = (!!conf && !isUndefined(conf["poster"])) ? conf["poster"] : ""; //默认封面图片地址为""
         //播放器节点id
         param.nodeId = createNodeId(); 
         //flash wmode
-        param.wmode = (!!conf && conf["wmode"] !== undefined) ? conf["wmode"] : "opaque";
+        param.wmode = (!!conf && !isUndefined(conf["wmode"])) ? conf["wmode"] : "opaque";
         //title
-        param.title = (!!conf && conf["title"] !== undefined) ? conf["title"] : "";
+        param.title = (!!conf && !isUndefined(conf["title"])) ? conf["title"] : "";
         //autoReplay
-        param.autoRewind = (!!conf && conf["autoRewind"] !== undefined) ? conf["autoRewind"] : 0;
+        param.autoRewind = (!!conf && !isUndefined(conf["autoRewind"])) ? true : false;
         //disableFullScreenButton(for webview)
-        param.disableFSButton = (!!conf && conf["disableFSButton"] !== undefined) ? conf["disableFSButton"] : 0;
+        param.disableFSButton = (!!conf && !isUndefined(conf["disableFSButton"])) ? true : false;
         //prefer flash. we prefer html5 by default
-        param.preferFlash =  (!!conf && (conf["preferFlash"] == 1 || conf["preferFlash"] == "1")) ? true : false;
+        param.preferFlash =  (!!conf && !isUndefined(conf["preferFlash"])) ? true : false;
         //cutomUI
-        param.customUI = (!!conf && (conf["customUI"] == 1 || conf["customUI"] == "1")) ? true : false;
+        param.customUI = (!!conf && !isUndefined(conf["customUI"])) ? true : false;
+        //simplifiedUI used by avplayer.swf
+        param.simplifiedUI = (!!conf && !isUndefined(conf["simplifiedUI"])) ? true : false;
+        
         //log div id
         if(!!conf && !!conf.logDivId) {
             AVLog.logDivId = conf.logDivId;
         }
 
         if(param.disableFSButton && (getMobileSystemInfo().sys==0)) { //禁用全屏按钮，只在android webview下生效
-
+            loadCSS('./css/disable_fullscreen_btn.css');
         }
 
         this._triggerSetupEvent(param);
-
     }
 
     _triggerSetupEvent(param) {
         let parseParamsCost = Math.round((performance.now() - this._bootTimestamp));
         AVLog.print(`参数解析完毕,耗时 ${parseParamsCost} ms`);
+
+        loadCSS('./css/main.css');
 
         let event_type;
         if(!param.preferFlash && BrowserSniff.isMSESupported && getMobileSystemInfo().browser !== 8) { //prefer html5 并且浏览器支持mse; 微博客户端居然支持mse，但是有很多问题
