@@ -52,6 +52,13 @@ class FragmentLoader extends EventHandler {
   }
 
   loadsuccess(response, stats, context) {
+    if (this.AVPLAYER.customEncryptionInfo.flag) {
+      let tempUint8Array = new Uint8Array(response.data);
+      let len = tempUint8Array.length;
+      for (let i=0; i<len; i++) {
+        tempUint8Array[i] ^= this.AVPLAYER.customEncryptionInfo.seed;
+      }
+    }
     let payload = response.data, frag = context.frag;
     // detach fragment loader on load success
     frag.loader = undefined;

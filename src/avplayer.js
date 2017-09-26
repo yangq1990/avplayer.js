@@ -190,7 +190,11 @@ class AVPlayer {
         param.customUI = (!!conf && !isUndefined(conf["customUI"])) ? true : false;
         //simplifiedUI used by avplayer.swf
         param.simplifiedUI = (!!conf && !isUndefined(conf["simplifiedUI"])) ? true : false;
-        
+        //加解密相关
+        this.encryptionInfo = {};
+        this.encryptionInfo.flag = (!!conf && !isUndefined(conf["encryptionFlag"])) ? true : false;
+        this.encryptionInfo.seed = (!!conf && !isUndefined(conf["seed"])) ? conf["seed"] : 1;
+
         //log div id
         if(!!conf && !!conf.logDivId) {
             AVLog.logDivId = conf.logDivId;
@@ -457,6 +461,10 @@ class AVPlayer {
         if (subtitleTrackController) {
           subtitleTrackController.subtitleTrack = subtitleTrackId;
         }
+    }
+
+    get customEncryptionInfo() {
+        return this.encryptionInfo;
     }
 }
 

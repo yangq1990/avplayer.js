@@ -1,6 +1,6 @@
 {
   "name": "avplayer.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "生成flash&h5播放器的js sdk",
   "main": "index.js",
   "scripts": {
